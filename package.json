@@ -1,0 +1,32 @@
+{
+  "name": "fantastic-memory",
+  "version": "1.0.0",
+  "description": "Algorithme de recherche JS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "env-cmd -f ./env/.env.dev node index.js",
+    "prod": "env-cmd -f ./env/.env.prod node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/David-bod/fantastic-memory.git"
+  },
+  "keywords": [
+    "algorithme"
+  ],
+  "author": "David Bodineau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/David-bod/fantastic-memory/issues"
+  },
+  "homepage": "https://github.com/David-bod/fantastic-memory#readme",
+  "dependencies": {
+    "discord.js": "^13.3.1",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.14"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
+  }
+}
