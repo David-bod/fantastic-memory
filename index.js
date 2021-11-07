@@ -1,7 +1,6 @@
 const connect = require('./mysql_connect');
-const discord = require('discord.js');
 const connect_discord = require('./discord_connect');
-const { MessageEmbed } = require('discord.js');
+const { MessageActionRow, MessageEmbed, MessageButton, MessageSelectMenu } = require('discord.js');
 
 setTimeout(initialisation, 3000);
 let array_whitelist = [];
@@ -58,10 +57,9 @@ function initialisation() {
     });
 }
 
-
 /* Récupération message pour ajout d'une URL */
 const prefixAddUrl = "!addurl";
-const idChannel = "906165131787001888";
+const idChannel = process.env.CHANNEL_ID_ONE;
 
 connect_discord.on('message', searchTerms => {
     const author = searchTerms.author.username;
@@ -165,10 +163,40 @@ function error4(author, nameSite) {
 
 // Le site a été trouvé et au moins un produit a été identifé */
 function succes1(author, nameSite, splitMessage, array_findMaxPoints, array_findTypeOfProduct) {
+    const btn1 = new MessageActionRow()
+    .addComponents(
+        new MessageSelectMenu()
+        .setCustomId('select')
+        .setPlaceholder('Je me suis trompé ?')
+        .addOptions([
+            { label: "Coffret", description: 'Coffret uniquement.', value: 'opt_1', },
+            { label: "Coffret dresseur d'élite", description: 'ETB uniquement.', value: 'opt_2', },
+            { label: "Deck", description: 'Necessaire de dresseur, deck, coffret académie.', value: 'opt_3', },
+            { label: "Display", description: 'Display scellé ou boite de 36 boosters (cartons).', value: 'opt_4', },
+            { label: "Booster", description: "Booster à l'unité ou artset.", value: 'opt_5', },
+            { label: "Duopack", description: 'Duopack uniquement.', value: 'opt_6', },
+            { label: "Tripack", description: 'Tripack uniquement.', value: 'opt_7', },
+            { label: "Pokébox", description: 'Pokébox ou lot de pokébox.', value: 'opt_8', },
+            { label: "Pokéball", description: 'Pokéball uniquement.', value: 'opt_9', },
+            { label: "Valisette", description: 'Valisette uniquement.', value: 'opt_10', },
+            { label: "Mini-tins", description: "Mini-tins à l'unité, en lot ou en display.", value: 'opt_11', },
+        ]),
+    );
+
+    const btn2 = new MessageActionRow()
+    .addComponents(
+        new MessageButton()
+        .setCustomId('cancel')
+        .setLabel('Annuler')
+        .setStyle('DANGER')
+    );
+
     const succ1 = new MessageEmbed()
     .setColor("GREEN")
     .setTitle("Nous avons identifié le produit !")
     .setDescription("Il semblerait que le site soit : " + nameSite + " et que le produit soit le suivant : " + array_findTypeOfProduct + ". Votre url est : " + splitMessage)
     .setAuthor(author);
-    connect_discord.channels.cache.get(idChannel).send({ embeds : [succ1] }); 
+    connect_discord.channels.cache.get(idChannel).send({ embeds: [succ1], components: [btn1, btn2] });
+
+    /* Intéraction avec le bouton et menu à dev */
 }
